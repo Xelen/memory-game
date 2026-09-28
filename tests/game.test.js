@@ -51,3 +51,36 @@ test('all pairs finish the game once and further clicks do nothing', () => {
   assert.equal(game.state.pairs, 8);
   assert.equal(finishes, 1);
 });
+
+test('restart cancels mismatch timer and never closes a card in the new game', (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const game = createGame();
+  const oldCards = game.state.cards;
+  game.selectCard(oldCards[0].id);
+  game.selectCard(oldCards.find((card) => card.type !== oldCards[0].type).id);
+  game.startNewGame();
+  assert.notEqual(game.state.cards, oldCards);
+  assert.equal(game.state.moves, 0);
+  assert.equal(game.state.pairs, 0);
+  assert.equal(game.state.locked, false);
+  const first = game.state.cards[0];
+  game.selectCard(first.id);
+  t.mock.timers.tick(1500);
+  assert.equal(first.state, 'opened');
+  assert.equal(game.state.selected.length, 1);
+  assert.equal(game.state.moves, 0);
+});
+
+test('restart after victory restores a fully active game', () => {
+  const game = createGame();
+  for (const type of new Set(game.state.cards.map((card) => card.type))) {
+    game.state.cards.filter((card) => card.type === type).forEach((card) => game.selectCard(card.id));
+  }
+  game.startNewGame();
+  assert.equal(game.state.finished, false);
+  assert.equal(game.state.moves, 0);
+  assert.equal(game.state.pairs, 0);
+  assert.ok(game.state.cards.every((card) => card.state === 'closed'));
+  game.selectCard(game.state.cards[0].id);
+  assert.equal(game.state.selected.length, 1);
+});

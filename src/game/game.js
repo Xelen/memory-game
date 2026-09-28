@@ -37,5 +37,19 @@ export function createGame(onChange = () => {}) {
     onChange(state);
   }
 
-  return { state, selectCard };
+  function startNewGame() {
+    if (mismatchTimeoutId !== null) {
+      clearTimeout(mismatchTimeoutId);
+      mismatchTimeoutId = null;
+    }
+    state.cards = createDeck();
+    state.moves = 0;
+    state.pairs = 0;
+    state.selected = [];
+    state.locked = false;
+    state.finished = false;
+    onChange(state);
+  }
+
+  return { state, selectCard, startNewGame };
 }
