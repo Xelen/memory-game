@@ -1,6 +1,4 @@
 import './style.css';
+import { createLayout } from './ui/layout.js';
 
-const app = document.createElement('main');
-app.classList.add('app');
-
-document.body.append(app);
+createLayout();
