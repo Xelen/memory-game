@@ -13,3 +13,12 @@ body {
   min-height: 100vh;
   padding: 40px;
 }
+
+.modal {
+  border: 0;
+  padding: 0;
+  max-width: min(460px, calc(100% - 32px));
+}
+
+.modal::backdrop { background: #000a; }
+.modal-panel { padding: 28px; }
