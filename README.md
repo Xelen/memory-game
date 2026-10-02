@@ -40,12 +40,10 @@ npm run dev
 ## Сборка и проверка
 
 ```bash
-npm test
 npm run build
 npm run preview
 ```
 
-- `npm test` — тесты колоды, игровой логики и хранения результатов.
 - `npm run build` — production-сборка в папку `dist`.
 - `npm run preview` — локальный просмотр готовой сборки по адресу из терминала.
 
